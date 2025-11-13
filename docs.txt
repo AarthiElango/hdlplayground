@@ -1,0 +1,23 @@
+12-11-2025 Meeting Discussion About HDL Playground
+
+1) Flexible Compilation Options- No strict dependency for both design and testbench files to compile together
+
+Commands:
+iverilog -o out design.v testbench.v ( for compiling both the design file and the testbench together. )
+iverilog -o out design.v ( Used when you only want to check or compile the design file only (no testbench). )
+iverilog -o out testbench.v ( Used when you only want to check or compile the  testbench (no Design) ).
+
+ 2)Console output File
+
+Command:
+ vvp out ( Compiles both files into a single simulation executable (out). )
+
+ 3) initially editor view before authentication - no.  we stick with this flow. checking eda, it asks to select tool first, then ask to login..  - unnecessary click and diversions
+ 4) Make Option For Project autosave on editor 
+ 5) Option To Create multiple files on design and testbench  
+ 6) github (Integration In Future)
+ 7)  For Waveform We Will also Run and Check In Fliplot , any issues are there we will Update 
+
+      8)  Ew skills credential ( https://www.ewskills.com/ )
+           aarthi7813@gmail.com  
+           Aarthi@123

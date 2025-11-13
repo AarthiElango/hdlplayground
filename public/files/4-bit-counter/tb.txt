@@ -1,0 +1,32 @@
+// Testbench for 4-bit counter
+module counter_tb;
+  reg clk, rst, en;
+  wire [3:0] count;
+  
+  counter uut (
+    .clk(clk),
+    .rst(rst),
+    .en(en),
+    .count(count)
+  );
+  
+  initial clk = 0;
+  always #5 clk = ~clk;
+  
+  initial begin
+    $dumpfile("counter.vcd");
+    $dumpvars(0, counter_tb);
+    
+    rst = 1; en = 0;
+    #10 rst = 0; en = 1;
+    
+    #200 en = 0;
+    #20 en = 1;
+    
+    #100 $finish;
+  end
+  
+  always @(posedge clk) begin
+    $display("Time=%0t count=%d", $time, count);
+  end
+endmodule
