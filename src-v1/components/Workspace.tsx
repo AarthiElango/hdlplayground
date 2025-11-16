@@ -13,8 +13,8 @@ import NoProjectSelected from './NoProjectSelected';
 import { FileCode, TestTube } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import useWorkspaceActions from './WorkspaceActions';
-import WorkspaceSaveDialog from './workspace/SaveDialog';
 import { get } from 'lodash';
+import api from '@/lib/axios';
 
 export default function Workspace() {
 
@@ -24,7 +24,6 @@ export default function Workspace() {
   const [template, setTemplate] = useState<any>({});
   const [source, setSource] = useState('');
   const [tb, setTb] = useState('');
-  const [openSaveDialog, setOpenSaveDialog] = useState({ args: {}, show: false });
 
   const { onRun, onSave, onDownload } = useWorkspaceActions()
   const { setRunResult} = useWorkspaceStore();
@@ -62,35 +61,19 @@ export default function Workspace() {
       onRun(args)
     }
     if (workspaceAction.action == 'save') {
+      onSave(args);
 
-      setOpenSaveDialog({ args: args, show: true });
     }
     if (workspaceAction.action == 'download') {
       onDownload(args)
     }
   }, [workspaceAction])
 
-  function onSaveDialogClose(result?: any) {
-    if (result && result.comments) {
-      const args: any = get(openSaveDialog, 'args', {});
-      args.comments = result.comments;
-      onSave(args);
-      sourceRef.current?.setValue(args.src)
-      testbenchRef.current?.setValue(args.tb)
-
-    }
-    setOpenSaveDialog({ args: {}, show: false });
-
-  }
 
   async function getFileContents() {
-    const APP_URL = import.meta.env.VITE_APP_URL;
-    const sourceRes = await fetch(`${APP_URL}/${project.template.source}`);
-    const source = await sourceRes.text();
-    const tbRes = await fetch(`${APP_URL}/${project.template.testbench}`);
-    const tb = await tbRes.text();
-    setSource(source);
-    setTb(tb);
+    const response = await api.get(`projects/${project.slug}/contents`);
+    setSource(get(response, 'data.contents.src'));
+    setTb(get(response, 'data.contents.tb'));
   }
 
   function srcCodeEdited(edited: boolean) {
@@ -199,9 +182,6 @@ export default function Workspace() {
           </ResizablePanel>
         )}
       </ResizablePanelGroup>
-      {
-        openSaveDialog.show && <WorkspaceSaveDialog closeSaveDialog={onSaveDialogClose} />
-      }
 
     </>
   );

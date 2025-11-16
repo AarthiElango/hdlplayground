@@ -12,7 +12,7 @@ iverilog -o out testbench.v ( Used when you only want to check or compile the  t
 Command:
  vvp out ( Compiles both files into a single simulation executable (out). )
 
- 3) initially editor view before authentication - no.  we stick with this flow. checking eda, it asks to select tool first, then ask to login..  - unnecessary click and diversions
+ 3) initially editor view before authentication - no. basic setup is collapsing  
  4) Make Option For Project autosave on editor 
  5) Option To Create multiple files on design and testbench  
  6) github (Integration In Future)
@@ -21,3 +21,14 @@ Command:
       8)  Ew skills credential ( https://www.ewskills.com/ )
            aarthi7813@gmail.com  
            Aarthi@123
+
+           1. Flexible Compilation Options - No strict dependency - Yet to be tested... what happens if we pass empty testbench file
+           2. Console output File - completed
+           3. initially editor view before authentication  - completed
+           4. Make Option For Project autosave on editor - future integration
+           5. Option To Create multiple files on design and testbench   - option created.. untested
+           6. github integration - future
+           7. save and retrieve user projects
+           8. tools selection - option done..need to test if interated with yosys or system verilog
+           9. Download files
+           10. On save - update same code instead of new version - completed

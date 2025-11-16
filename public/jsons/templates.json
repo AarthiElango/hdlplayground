@@ -1,70 +1,77 @@
 [
     {
         "id":1,
-        "name": "Blank",
-        "language": "Verilog",
-        "description": "Blank Template",
-        "testbench": "files/blank/tb.txt",
-        "source": "files/blank/source.txt",
-        "tags": [
-            "basic",
-            "gate"
-        ],
-        "tool": "iverilog",
-        "editor":"verilog"
+        "name":"Blank Verilog",
+        "slug":"blank-verilog",
+        "description":"contains startup files for blank verilog project",
+        "fileext":".v",
+        "files":{
+            "design":[
+                {
+                    "name":"design.v",
+                    "src":"files/blank/design.v"
+                }
+            ],
+            "testbench":[
+                {
+                    "name":"tb.v",
+                    "src":"files/blank/tb.v"
+                }
+            ]
+        },
+        "language":"verilog",
+        "tools":["icarus", "system-verilog"]
     },
     {
         "id":2,
-        "name": "AND Gate",
-        "language": "Verilog",
-        "description": "Simple 2-input AND gate",
-        "testbench": "files/and-gate/tb.txt",
-        "source": "files/and-gate/source.txt",
-        "tags": [
-            "basic",
-            "gate"
-        ],
-        "tool": "iverilog",
-        "editor":"verilog"
+        "name":"Addition Verilog",
+        "slug":"addition-verilog",
+        "description":"contains program for addition in verilog project",
+        "fileext":".v",
+        "files":{
+            "design":[
+                {
+                    "name":"design.v",
+                    "src":"files/addition-program/design.v",
+                    "contents":""
+                }
+            ],
+            "testbench":[
+                {
+                    "name":"tb.v",
+                    "src":"files/addition-program/tb.v",
+                    
+                    "contents":""
+                }
+            ]
+        },
+        "language":"verilog",
+        "tools":["icarus"]
     },
-    {
+     {
         "id":3,
-        "name": "Blank",
-        "language": "System Verilog",
-        "description": "Blank Template",
-        "testbench": "files/blank/tb.txt",
-        "source": "files/blank/source.txt",
-        "tags": [
-            "sequential",
-            "counter"
-        ],
-        "tool": "iverilog",
-        "editor":"verilog"
-    }, {
-        "id":4,
-        "name": "4-bit Counter",
-        "language": "System Verilog",
-        "description": "4-bit up counter with enable and reset",
-        "testbench": "files/4-bit-counter/tb.txt",
-        "source": "files/4-bit-counter/source.txt",
-        "tags": [
-            "sequential",
-            "counter"
-        ],
-        "tool": "iverilog",
-        "editor":"verilog"
-    }, {
-        "id":5,
-        "name": "Addition Program",
-        "language": "Verilog",
-        "description": "Example addition program",
-        "testbench": "files/addition-program/tb.txt",
-        "source": "files/addition-program/source.txt",
-        "tags": [
-            "sequential",
-            "counter"
-        ],
-        "tool": "iverilog",
-        "editor":"verilog"
+        "name":"Blink",
+        "slug":"blink",
+        "description":"contains program for blink in verilog project",
+        "fileext":".v",
+        "files":{
+            "design":[
+                {
+                    "name":"design.v",
+                    "src":"files/blink/design.v",
+                    "contents":""
+                }
+            ],
+            "testbench":[
+                {
+                    "name":"tb.v",
+                    "src":"files/blink/tb.v",
+                    
+                    "contents":""
+                }
+            ]
+        },
+        "language":"verilog",
+        "tools":["icarus"]
     }
 ]

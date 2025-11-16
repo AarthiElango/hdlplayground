@@ -54,13 +54,13 @@ export default function useWorkspaceActions() {
         }
 
         const saveCodes = async (payload: any) => {
-            const response = await api.post('histories', payload);
+            const response = await api.put(`projects/${props.project.slug}`, payload);
             if (response.data.success) {
                 toast.success("Saved successfully");
             }
         }
 
-        saveCodes({ slug: props.project.slug, comments: props.comments, contents: { src: props.src, tb: props.tb } })
+        saveCodes({ contents: { src: props.src, tb: props.tb } })
     }
 
 

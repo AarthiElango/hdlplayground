@@ -32,6 +32,7 @@ import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import { useProjectSidebarStore } from "@/store/projectSidebar";
 import useTemplates from "@/lib/templates";
+import { cloneDeep } from "lodash";
 
 
 
@@ -42,16 +43,16 @@ export function NewProjectDialog() {
     const [templates, setTemplates] = useState<any[]>([]);
     const { toggleProjectDialog, setProject } = useWorkspaceStore();
     const { getUserProjects } = useProjectSidebarStore();
-    const { getTemplates} = useTemplates();
+    const { getTemplates, getTemplateContents } = useTemplates();
 
-    useEffect(()=>{
+    useEffect(() => {
         getTemplatesJson();
-    },[]);
-   
+    }, []);
+
 
     async function getTemplatesJson() {
         const result = await getTemplates();
-            setTemplatesJson(result);
+        setTemplatesJson(result);
     }
 
     useEffect(() => {
@@ -103,11 +104,13 @@ export function NewProjectDialog() {
     }, [selectedLang, templatesJson, setValue]);
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const response = await api.post('projects', values);
-        if(!response.data.slug){
+        const payload:any = cloneDeep(values);
+        payload.contents = await getTemplateContents(values.template);
+        const response = await api.post('projects', payload);
+        if (!response.data.slug) {
             return;
         }
-        setProject({slug:response.data.slug});
+        setProject({ slug: response.data.slug });
         getUserProjects(true);
         toggleProjectDialog(false);
 

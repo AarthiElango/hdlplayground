@@ -1,51 +1,41 @@
 import { create } from "zustand";
 
 interface WorkspaceStore {
-
-  runResult: any | null;
-  setRunResult: (result: any) => void;
-
-  codeEditorValues: any | null;
-  setCodeEditorValues: (values: any) => void;
-
-  project: any | null;
-  setProject: (projectData: any) => void;
-
-  showProjectDialog: boolean;
-  toggleProjectDialog: (show: boolean) => void;
-
-  isSourceCodeEdited: boolean;
-  sourceCodeEdited: (edited: boolean) => void;
-
-  isTestbenchCodeEdited: boolean;
-  testbenchCodeEdited: (edited: boolean) => void;
-
-  workspaceAction: any | null;
-  setWorkspaceAction: (action: any) => void;
+  files: Record<string, any[]>;
+  setFileContents: (
+    category: string,   // "design" / "testbench"
+    filename: string,
+    contents: string
+  ) => void;
 }
 
 export const useWorkspaceStore = create<WorkspaceStore>((set) => ({
-  runResult: null,
-  setRunResult: (result: any) => set({ runResult: result }),
+  files: {
+    design: [],
+    testbench: [],
+  },
 
-  codeEditorValues: null,
-  setCodeEditorValues: (values: any) => set({ codeEditorValues: values }),
+  setFileContents: (category, filename, contents) =>
+    set((state) => {
+      const existing = state.files[category] || [];
+      // Check if file already exists
+      const updated = existing.some((f) => f.name === filename)
+        ? existing.map((f) =>
+            f.name === filename ? { ...f, contents } : f
+          )
+        : [
+            ...existing,
+            {
+              name: filename,
+              contents,
+            },
+          ];
 
-  project: null,
-  setProject: (projectData) => set({ project: projectData }),
-
-  showProjectDialog: false,
-  toggleProjectDialog: (show) => set({ showProjectDialog: show }),
-
-  isSourceCodeEdited: false,
-  sourceCodeEdited: (edited) => set({ isSourceCodeEdited: edited }),
-
-  isTestbenchCodeEdited: false,
-  testbenchCodeEdited: (edited) => set({ isTestbenchCodeEdited: edited }),
-
-  workspaceAction: null,
-  setWorkspaceAction: (action: any) => set({ workspaceAction: action }),
-
-
-
+      return {
+        files: {
+          ...state.files,
+          [category]: updated,
+        },
+      };
+    }),
 }));

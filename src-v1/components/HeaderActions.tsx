@@ -69,7 +69,7 @@ export default function HeaderActions() {
                   Download
                 </Button>
 
-                <Button
+                {/* <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setShowHistory(true)}
@@ -77,7 +77,7 @@ export default function HeaderActions() {
                 >
                   <History className="h-4 w-4 mr-2" />
                   History
-                </Button>
+                </Button> */}
 
                 {/* <Button
                   variant="outline"
