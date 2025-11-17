@@ -1,67 +1,43 @@
-import { useOutputStore } from "@/store/output";
-import { useWorkspaceStore } from "@/store/workspace";
-import { useEffect, useState } from "react";
 import { get } from 'lodash';
-import SchematicWaveform from "./SchematicWaveform";
-import api from "@/lib/axios";
-import { useMainStore } from "@/store/main";
+import { useOutputStore } from "@/store/output";
+import { useState } from 'react';
+import { Maximize2, Minimize2 } from "lucide-react";
+import { cn } from "@/lib/utils"; // optional, for className concatenation
 
 export default function Schematics() {
+  const { result } = useOutputStore();
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
-    // const { runYosys } = useOutputStore();
-    const  runYosys  = useOutputStore((state)=> state.runYosys);
-    const files = useWorkspaceStore((state) => state.files);
-    const [signals, setSignals] = useState([]);
-    const [timescale, setTimescale] = useState('');
-    const { project } = useMainStore();
+  const htmlString = get(result, 'schematic.schematic_svg', '');
 
-    useEffect(() => {
-        if (!runYosys) {
-            return;
-        }
-        if (runYosys) {
-            getYosysData();
-        }
-    }, [runYosys]);
+  return (
+    <div
+      className={cn(
+        "relative w-full h-full bg-white transition-all duration-300 svg-viewer",
+        isFullscreen && "fixed inset-0 z-50 p-4 bg-white"
+      )}
+    >
+      {/* Fullscreen Toggle Button */}
+      <button
+        onClick={() => setIsFullscreen(!isFullscreen)}
+        className={cn(
+          "absolute top-3 right-3 z-50 p-2 rounded-full border border-gray-300 backdrop-blur-sm",
+          "bg-white/80 hover:bg-white/90 text-gray-800 shadow-lg transition-all"
+        )}
+        title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+      >
+        {isFullscreen ? (
+          <Minimize2 className="h-5 w-5 text-gray-600" />
+        ) : (
+          <Maximize2 className="h-5 w-5 text-gray-600" />
+        )}
+      </button>
 
-    async function getYosysData() {
-        const codes = {
-            design: get(files, 'design.0.contents'),
-            testbench: get(files, 'testbench.0.contents'),
-        }
-        const payload = { verilog: `${codes.design}\n\n${codes.testbench}`, top: "tb_blink" }
-
-        try {
-            // const YOSYS_URL = import.meta.env.VITE_YOSYS_URL;
-            // const response = await fetch(`${YOSYS_URL}/run_simulation`, {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify(payload),
-            // });
-
-            // if (!response.ok) {
-            //     const errorPayload = await response.json().catch(() => ({}));
-            //     throw new Error(errorPayload.detail || "Simulation failed.");
-            // }
-            const response = await api.post(`/projects/${project.slug}/yosys/simulation`, payload)
-            
-              if (response.data?.signals) {
-                            setSignals(response.data.signals);
-
-            }
-              if (response.data?.timescale) {
-                            setTimescale(response.data.timescale);
-
-            }
-        } catch (err) {
-         
-        }
-
-    }
-
-    return (
-        <>
-            {runYosys && <SchematicWaveform signals={signals} timescale={timescale} />}
-        </>
-    );
+      {/* SVG Container */}
+      <div
+        className="svg-content w-full h-full overflow-auto"
+        dangerouslySetInnerHTML={{ __html: htmlString }}
+      ></div>
+    </div>
+  );
 }

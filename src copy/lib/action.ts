@@ -21,7 +21,7 @@ export function useActions() {
     const { project, toggleProjectDialog } = useMainStore();
     const { toggleMyProjects } = useHeaderStore();
     const { tool } = useMainStore();
-    const { setRun, setResult } = useOutputStore();
+    const { setUuid, setRunYosys } = useOutputStore();
 
     function onDownloadClick() {
 
@@ -51,19 +51,20 @@ export function useActions() {
     }
 
     async function onRunClick() {
-        setRun(false);
-        const design = (get(files, 'design.0.contents'));
-        const testbench = get(files, 'testbench.0.contents')
-       
-        const verilogForSimulation = (`${design}\n\n${testbench}`).replace(/\r\n/g, "\n")
-        const verilogForSchematic = (`${design}`).replace(/\r\n/g, "\n")
-        const simulationPayload = { verilog:verilogForSimulation , top: "tb_blink" }
-        const simulation = await api.post(`projects/${project.slug}/run/simulation`, simulationPayload);
-       
-        const schematicPayload = { verilog: verilogForSchematic, top: "blink" }
-        const schematic = await api.post(`projects/${project.slug}/run/schematic`, schematicPayload);
-        setResult({simulation:simulation.data, schematic:schematic.data})
-        setRun(true);
+        setRunYosys(false);
+
+        const payload = {
+            uuid: uuidv4(),
+            design: get(files, 'design.0.contents'),
+            testbench: get(files, 'testbench.0.contents'),
+        }
+        const response = await api.post(`projects/${project.slug}/run`, payload);
+        if (!response.data?.uuid) {
+            return;
+        }
+        const uuid = response?.data?.uuid;
+        setUuid(uuid);
+        setRunYosys(true);
 
     }
 

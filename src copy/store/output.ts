@@ -3,17 +3,13 @@ import { create } from "zustand";
 interface OutputStore {
   uuid: any | null;
   setUuid: (uuid: any) => void;
-  run: boolean;
-  setRun: (run: boolean) => void;
-  result:any;
-  setResult:(data:any) => void;
+  runYosys: boolean;
+  setRunYosys: (runYosys: boolean) => void;
 }
 
 export const useOutputStore = create<OutputStore>((set) => ({
   uuid: null,
   setUuid: (uuid: any) => set({ uuid: uuid }),
-  run:false,
-  setRun: (run: boolean) => set({ run: run}),
-  result:{},
-  setResult:(result:any)=>set({result:result})
+  runYosys:false,
+  setRunYosys: (runYosys: boolean) => set({ runYosys: runYosys})
 }));
