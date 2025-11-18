@@ -12,13 +12,14 @@ import { useEffect } from 'react';
 import { useShared } from '@/lib/shared';
 import { isEmpty } from 'lodash';
 import NewProjectDialog from './Main/NewProjectDialog';
+import { useWorkspaceStore } from '@/store/workspace';
 
 export default function Main() {
 
     const { showSidebar } = useSidebarStore();
     const { project, showProjectDialog, toggleProjectDialog, template, setTemplate } = useMainStore();
     const { fetchTemplateById } = useShared();
-
+    const { filesFromGit } = useWorkspaceStore();
 
     useEffect(() => {
 
@@ -36,6 +37,12 @@ export default function Main() {
 
 
     }, [project]);
+
+    useEffect(()=>{
+        if(!template) return;
+        const newTemplate = {...template, ...{files:filesFromGit}}
+        setTemplate(newTemplate)
+    },[filesFromGit]);
 
     return (
         <>

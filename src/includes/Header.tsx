@@ -1,14 +1,39 @@
 import Tooltip from "@/components/Tooltip";
 import { Badge } from "@/components/ui/badge";
 import { useActions } from "@/lib/action";
+import api from "@/lib/axios";
 import { useAuthStore } from "@/store/auth";
+import { useGithubStore } from "@/store/github";
 import { useMainStore } from "@/store/main";
-import { Code, LogIn, LogOut } from "lucide-react";
+import { Code, LogIn, LogOut, LucideGithub } from "lucide-react";
+import GithubDialog from "./Github/GithubDialog";
 
 export default function Header() {
-  const  user  = useAuthStore((state) => state.user);
+  const user = useAuthStore((state) => state.user);
   const { template, project } = useMainStore();
   const { onActionClick } = useActions();
+  const { showGithubDialog, toggleGithubDialog} = useGithubStore();
+
+  const githubAuth = async () => {
+   
+    const exists = await api.get('github/auth/exists');
+    if(exists.data.success){
+      toggleGithubDialog(true);
+      return;
+    }
+    const response = await api.get(`/github/auth/start`)
+    console.log(response.data);
+    if(!response.data.url){
+      return;
+    }
+
+   window.open(
+      response.data.url,
+      "githubLogin",
+      "width=600,height=700"
+    );
+  };
+
   return (
     <>
       <header className="border-b bg-gradient-to-r from-card via-card to-card">
@@ -35,14 +60,22 @@ export default function Header() {
           </div>
           <div>
             {user?.username ? (
-              <Tooltip title="Logout">
-                <button className="cursor-pointer" onClick={()=>onActionClick('logout')}>
-                  <LogOut />
-                </button>
-              </Tooltip>
+              <>
+                <Tooltip title="GitHub">
+                  <button className="cursor-pointer" onClick={() => githubAuth()}>
+                    <LucideGithub />
+                  </button>
+                </Tooltip>
+                <Tooltip title="Logout">
+                  <button className="cursor-pointer" onClick={() => onActionClick('logout')}>
+                    <LogOut />
+                  </button>
+                </Tooltip>
+              </>
+
             ) : (
               <Tooltip title="LogIn" side="left">
-                <button className="cursor-pointer" onClick={()=>onActionClick('login')}>
+                <button className="cursor-pointer" onClick={() => onActionClick('login')}>
                   <LogIn />
                 </button>
               </Tooltip>
@@ -50,6 +83,7 @@ export default function Header() {
           </div>
         </div>
       </header>
+      { showGithubDialog && <GithubDialog onClose={()=>toggleGithubDialog(false)} />}
     </>
   );
 }

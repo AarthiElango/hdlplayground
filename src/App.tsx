@@ -45,7 +45,7 @@ function App() {
           return;
         }
         
-        setProject(response?.data.project); // TODO: call backend and set project
+        setProject(response?.data.project);
       }
       getProject();
     }

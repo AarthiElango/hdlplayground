@@ -1,6 +1,6 @@
 import { get } from 'lodash';
 import { useOutputStore } from "@/store/output";
-import { useState, type FC } from 'react';
+import { useState, useRef, type FC } from 'react';
 import { Maximize2, Minimize2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -9,9 +9,13 @@ export const Fliplot: FC<{}> = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const vcd = get(result, 'simulation.vcd', '');
   const APP_URL = import.meta.env.VITE_APP_URL;
-const [mountedOnce] = useState(true);
-  // Compute src once
+
+  // Ref to hold iframe instance
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+
+  // Compute src
   const src = vcd ? `${APP_URL}/fliplot/index.html?vcd=${btoa(vcd)}` : '';
+
   return (
     <div
       className={cn(
@@ -37,9 +41,10 @@ const [mountedOnce] = useState(true);
 
       {/* Iframe */}
       <div className="svg-content w-full h-full overflow-auto">
-        {mountedOnce && src && (
+        {src && !iframeRef.current && (
           <iframe
-            src={src} // no key needed
+            ref={iframeRef}
+            src={src}
             className="flex-1 w-full border-none"
             style={{ display: "block", height: "100%" }}
             title="VCD Viewer"

@@ -5,13 +5,11 @@ import {
   TabsTrigger,
   TabsContent,
 } from "@/components/ui/tabs";
-import { Terminal, Activity, CircuitBoard, Cog } from "lucide-react";
+import { Terminal, Activity, CircuitBoard } from "lucide-react";
 import { Fliplot } from "@/includes/Output/VcdViewer";
 import Logs from "../Output/Logs";
 import Errors from "../Output/Errors";
-import { useMainStore } from "@/store/main";
 import Schematics from "../Output/Schematics";
-import Synthesis from "../Output/Synthesis";
 import { useOutputStore } from "@/store/output";
 import Netlist from "../Output/Netlist";
 import JsonNetlist from "../Output/JsonNetlist";
@@ -19,7 +17,6 @@ import JsonNetlist from "../Output/JsonNetlist";
 
 export const Output: React.FC = () => {
   const [activeTab, setActiveTab] = useState("console"); // 👈 controlled tab state
-  const { project} = useMainStore();
   const { run }  = useOutputStore();
   return (
     <Tabs

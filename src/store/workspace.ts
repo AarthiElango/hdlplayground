@@ -2,6 +2,8 @@ import { create } from "zustand";
 
 interface WorkspaceStore {
   files: Record<string, any[]>;
+  filesFromGit:Record<string, any[]>;
+  updateFilesFromGit:(files:any) => void;
   setFileContents: (
     category: string,   // "design" / "testbench"
     filename: string,
@@ -14,7 +16,11 @@ export const useWorkspaceStore = create<WorkspaceStore>((set) => ({
     design: [],
     testbench: [],
   },
-
+  filesFromGit: {
+    design: [],
+    testbench: [],
+  },
+  updateFilesFromGit:(files:any)=>set({filesFromGit:files}),
   setFileContents: (category, filename, contents) =>
     set((state) => {
       const existing = state.files[category] || [];
