@@ -73,5 +73,31 @@
         },
         "language":"verilog",
         "tools":["icarus"]
-    }
+    },
+    {
+    "id": 4,
+    "name": "D Flip-Flop",
+    "slug": "dff",
+    "description": "contains program for D Flip-Flop design and testbench",
+    "fileext": ".v",
+    "files": {
+        "design": [
+            {
+                "name": "design.v",
+                "src": "files/dff/design.v",
+                "contents": ""
+            }
+        ],
+        "testbench": [
+            {
+                "name": "tb.v",
+                "src": "files/dff/tb.v",
+                "contents": ""
+            }
+        ]
+    },
+    "language": "verilog",
+    "tools": ["icarus"]
+}
+
 ]

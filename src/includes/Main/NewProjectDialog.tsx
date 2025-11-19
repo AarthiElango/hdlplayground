@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import {
   Dialog,
@@ -25,10 +26,10 @@ export default function NewProjectDialog({ onClose }: ProjectDialogProps) {
   const { template, tool } = useMainStore();
   const { files } = useWorkspaceStore();
 
-
   const handleSubmit = () => {
+    // Only title is required, description is optional
     if (!title.trim()) return;
-    if (!description.trim()) return;
+    
     onCreate({ title, description });
     setTitle("");
     setDescription("");
@@ -39,16 +40,25 @@ export default function NewProjectDialog({ onClose }: ProjectDialogProps) {
     const payload = cloneDeep(data);
    
     payload.files = files;
-      payload.template_id = template.id;
-      payload.tool_id = tool.id;
+    payload.template_id = template.id;
+    payload.tool_id = tool.id;
+    
+    // Ensure description always has a value (even if empty) to satisfy backend validation
+    payload.description = data.description?.trim() || '';
 
-    const response = await api.post('projects', payload);
-    if (!response?.data?.success || !response?.data?.slug) {
-      return;
+    try {
+      const response = await api.post('projects', payload);
+      if (!response?.data?.success || !response?.data?.slug) {
+        console.error('Project creation failed:', response);
+        return;
+      }
+      const APP_URL = import.meta.env.VITE_APP_URL;
+      window.location.href = `${APP_URL}/${response.data.slug}`;
+      onClose();
+    } catch (error) {
+      console.error('Error creating project:', error);
+      // Optionally show error message to user
     }
-    const APP_URL = import.meta.env.VITE_APP_URL;
-    window.location.href = `${APP_URL}/${response.data.slug}`
-    onClose();
   }
 
   return (
@@ -70,11 +80,10 @@ export default function NewProjectDialog({ onClose }: ProjectDialogProps) {
           </div>
 
           <div className="space-y-2">
-            <Label>Description</Label>
+            <Label>Description (Optional)</Label>
             <Textarea
               placeholder="Short project description..."
               value={description}
-              required={true}
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
@@ -90,3 +99,4 @@ export default function NewProjectDialog({ onClose }: ProjectDialogProps) {
     </Dialog>
   );
 }
+
