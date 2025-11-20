@@ -72,7 +72,7 @@ export default function Main() {
                             order={1}
                         >
                             {
-                                template?.slug && <Tabs template={template} refKey="testbench" />
+                                template?.slug && <Tabs template={template} refKey="design" />
                             }
 
 
@@ -97,7 +97,7 @@ export default function Main() {
                                 >
 
                                     {
-                                        template?.slug && <Tabs template={template} refKey="design" />
+                                        template?.slug && <Tabs template={template} refKey="testbench" />
                                     }
                                 </ResizablePanel>
                                 <ResizableHandle />

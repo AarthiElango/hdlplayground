@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -22,7 +23,6 @@ export const MyProjects: React.FC<MyProjectsProps> = () => {
     const { toggleMyProjects } = useHeaderStore();
 
     useEffect(() => {
-
         getProjects();
     }, []);
 
@@ -34,13 +34,11 @@ export const MyProjects: React.FC<MyProjectsProps> = () => {
 
     async function onRestoreVersion(project: any) {
         const APP_URL = import.meta.env.VITE_APP_URL;
-        window.location.href = `${APP_URL}/${project.slug}`
+        window.location.href = `${APP_URL}/${project.slug}`;
     }
 
-   
-
     return (
-        <Sheet open={true} onOpenChange={()=>toggleMyProjects(false)}>
+        <Sheet open={true} onOpenChange={() => toggleMyProjects(false)}>
             <SheetContent side="right" className="w-[400px] sm:w-[540px]">
                 <SheetHeader>
                     <SheetTitle>Project History</SheetTitle>
@@ -54,7 +52,6 @@ export const MyProjects: React.FC<MyProjectsProps> = () => {
                         <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
                             <Clock className="h-12 w-12 mb-3" />
                             <p>No project history yet</p>
-
                         </div>
                     ) : (
                         <div className="space-y-4 p-3">
@@ -65,15 +62,24 @@ export const MyProjects: React.FC<MyProjectsProps> = () => {
                                 >
                                     <div className="flex items-start justify-between gap-2">
                                         <div className="flex-1">
+                                            {/* Display Project Name (title) */}
+                                            <h3 className="font-medium mb-2">
+                                                {project.title || 'Untitled Project'}
+                                            </h3>
+                                            
+                                            {/* Display Date */}
                                             <div className="flex items-center gap-2 mb-2">
                                                 <span className="text-sm text-muted-foreground">
                                                     {new Date(project.updated_at).toLocaleString()}
                                                 </span>
                                             </div>
+                                            
+                                            {/* Display Description if exists */}
                                             {project.description && (
-                                                <p className="text-sm mb-3">{project.description}</p>
+                                                <p className="text-sm text-muted-foreground">
+                                                    {project.description}
+                                                </p>
                                             )}
-
                                         </div>
 
                                         <Button
