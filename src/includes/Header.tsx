@@ -44,7 +44,7 @@ export default function Header() {
                 <Code />
               </div>
               <div>
-                <h1 className="text-black">HDL Playground v3</h1>
+                <h1 className="text-black">HDL Studio</h1>
                 <p className="text-xs text-muted-foreground">
                   Verilog &amp; Hardware Design Platform
                 </p>

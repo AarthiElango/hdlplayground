@@ -7,8 +7,7 @@ import {
 } from "@/components/ui/tabs";
 import { Terminal, Activity, CircuitBoard, Settings } from "lucide-react";
 import { Fliplot } from "@/includes/Output/VcdViewer";
-import Logs from "../Output/Logs";
-import Errors from "../Output/Errors";
+import Console from "../Output/Console.tsx"; // Changed from Logs
 import Schematics from "../Output/Schematics";
 import { useOutputStore } from "@/store/output";
 
@@ -61,10 +60,7 @@ export const Output: React.FC = () => {
       <div className="flex-1 overflow-auto bg-background">
         <TabsContent value="console" className="h-full">
           {run ? (
-            <div className="flex flex-col h-full">
-              <Logs />
-              <Errors />
-            </div>
+            <Console />
           ) : (
             <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
               Run your code to see console output

@@ -51,7 +51,7 @@ export function GuestDialog() {
         <Dialog open={true} onOpenChange={() => toggleGuestDialog(false)}>
             <DialogContent className="sm:max-w-[480px]">
                 <DialogHeader>
-                    <DialogTitle className="text-center text-2xl">Welcome to HDL Playground</DialogTitle>
+                    <DialogTitle className="text-center text-2xl">Welcome to HDL Studio</DialogTitle>
                     <DialogDescription className="text-center">
                         Login or create an account to start designing
                     </DialogDescription>
