@@ -1,0 +1,14 @@
+import { get } from 'lodash';
+import { useOutputStore } from "@/store/output";
+import {  type FC } from 'react';
+import VcdWaveformViewer from './VcdWaveformViewer-canvas';
+export const Fliplot: FC<{}> = () => {
+  const { result } = useOutputStore();
+  const vcd = get(result, 'simulation.vcd', '');
+
+  return (
+    <div>
+        {vcd && <VcdWaveformViewer vcd={vcd} />}
+    </div>
+  );
+};
