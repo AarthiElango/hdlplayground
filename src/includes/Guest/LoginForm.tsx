@@ -56,8 +56,8 @@ setLastAction('');
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "alaksandarjesus@yahoo.co.in",
-            password: "Password@123",
+            username: "",
+            password: "",
         },
     })
 

@@ -63,8 +63,8 @@ export function useActions() {
     async function onRunClick() {
     setRun(false);
 
-    const design = get(files, 'design.0.contents', '').trim();
-    const testbench = get(files, 'testbench.0.contents', '').trim();
+    const design = String(get(files, 'design.0.contents', ''))?.trim();;
+    const testbench = String(get(files, 'testbench.0.contents', ''))?.trim();
 
     // Extract module names if code is present
     const designModuleName = design ? extractModuleName(design) : null;
