@@ -111,13 +111,13 @@ export default function SetPasswordForm({ userProps, toggleLoginForm }: { userPr
 
                 <DialogFooter className="mt-4">
                     <div className="flex justify-between items-center w-full">
-                        {/* <button
+                        <button
                             type="button"
                             className="text-blue-600 hover:text-blue-800 underline font-medium focus:outline-none"
                             onClick={() => console.log("Navigate to forgot password")}
                         >
                             Back to login
-                        </button> */}
+                        </button>
 
                         <Button type="submit">Set password</Button>
 

@@ -56,8 +56,8 @@ setLastAction('');
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "alaksandarjesus@yahoo.co.in",
-            password: "Password@123",
+            username: "",
+            password: "",
         },
     })
 
@@ -97,7 +97,7 @@ setLastAction('');
                         <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                                <Input type="password" placeholder="Enter email" {...field} />
+                                <Input type="password" placeholder="Enter Password" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
