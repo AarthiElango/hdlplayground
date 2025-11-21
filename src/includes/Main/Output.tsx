@@ -10,6 +10,7 @@ import { Fliplot } from "@/includes/Output/VcdViewer";
 import Console from "../Output/Console.tsx"; // Changed from Logs
 import Schematics from "../Output/Schematics";
 import { useOutputStore } from "@/store/output";
+import Synthesis from "../Output/Synthesis.tsx";
 
 export const Output: React.FC = () => {
   const [activeTab, setActiveTab] = useState("console");
@@ -91,12 +92,14 @@ export const Output: React.FC = () => {
         <TabsContent value="synthesis" className="h-full">
           <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
             {run ? (
+              <Synthesis />
+              
+            ) : (
               <div className="text-center">
                 <Settings className="w-12 h-12 mx-auto mb-3 text-muted-foreground" />
-                <p>Synthesis results will appear here</p>
+                "Run your code to see synthesis results"
               </div>
-            ) : (
-              "Run your code to see synthesis results"
+              
             )}
           </div>
         </TabsContent>

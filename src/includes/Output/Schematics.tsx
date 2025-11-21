@@ -1,43 +1,69 @@
-import { get } from 'lodash';
+import { get } from "lodash";
 import { useOutputStore } from "@/store/output";
-import { useState } from 'react';
-import { Maximize2, Minimize2 } from "lucide-react";
-import { cn } from "@/lib/utils"; // optional, for className concatenation
+import { useState, useRef } from "react";
+import { Maximize2, Minimize2, Plus, Minus, RotateCcw } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function Schematics() {
   const { result } = useOutputStore();
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [zoom, setZoom] = useState(1);
+  const svgWrapperRef = useRef(null);
 
-  const htmlString = get(result, 'schematic.schematic_svg', '');
+  const htmlString = get(result, "schematic.schematic_svg", "");
+
+  const zoomIn = () => setZoom((z) => Math.min(z + 0.2, 5));
+  const zoomOut = () => setZoom((z) => Math.max(z - 0.2, 0.2));
+  const resetZoom = () => setZoom(1);
 
   return (
     <div
       className={cn(
-        "relative w-full h-full bg-white transition-all duration-300 svg-viewer",
+        "relative w-full h-full bg-white transition-all duration-300",
         isFullscreen && "fixed inset-0 z-50 p-4 bg-white"
       )}
     >
-      {/* Fullscreen Toggle Button */}
+      {/* Fullscreen Toggle */}
       <button
         onClick={() => setIsFullscreen(!isFullscreen)}
-        className={cn(
-          "absolute top-3 right-3 z-50 p-2 rounded-full border border-gray-300 backdrop-blur-sm",
-          "bg-white/80 hover:bg-white/90 text-gray-800 shadow-lg transition-all"
-        )}
-        title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+        className="absolute top-3 right-3 z-50 p-2 rounded-full border border-gray-300 bg-white shadow-lg"
       >
-        {isFullscreen ? (
-          <Minimize2 className="h-5 w-5 text-gray-600" />
-        ) : (
-          <Maximize2 className="h-5 w-5 text-gray-600" />
-        )}
+        {isFullscreen ? <Minimize2 /> : <Maximize2 />}
       </button>
 
+      {/* Zoom Controls */}
+      <div className="absolute bottom-5 right-5 z-50 flex flex-col gap-2">
+        <button
+          onClick={zoomIn}
+          className="p-2 rounded-full bg-white border shadow"
+        >
+          <Plus />
+        </button>
+        <button
+          onClick={zoomOut}
+          className="p-2 rounded-full bg-white border shadow"
+        >
+          <Minus />
+        </button>
+        <button
+          onClick={resetZoom}
+          className="p-2 rounded-full bg-white border shadow"
+        >
+          <RotateCcw />
+        </button>
+      </div>
+
       {/* SVG Container */}
-      <div
-        className="svg-content w-full h-full overflow-auto"
-        dangerouslySetInnerHTML={{ __html: htmlString }}
-      ></div>
+      <div className="w-full h-full overflow-auto">
+        <div
+          ref={svgWrapperRef}
+          style={{
+            transform: `scale(${zoom})`,
+            transformOrigin: "center top",
+          }}
+          dangerouslySetInnerHTML={{ __html: htmlString }}
+        />
+      </div>
     </div>
   );
 }
