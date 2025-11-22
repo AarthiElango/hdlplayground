@@ -1,9 +1,8 @@
 import { get } from "lodash";
 import { useOutputStore } from "@/store/output";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Maximize2, Minimize2, Plus, Minus, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useTheme } from "@/providers/ThemeProvider";
 
 export default function Schematics() {
   const { result } = useOutputStore();
@@ -11,29 +10,7 @@ export default function Schematics() {
   const [zoom, setZoom] = useState(1);
   const svgWrapperRef = useRef(null);
 
-  const { theme } = useTheme();
   const htmlString = get(result, "schematic.schematic_svg", "");
- const [sanitizedHtml, setSanitizedHtml] = useState(htmlString);
-
-useEffect(() => {
-  let updated = htmlString;
-
-  if (theme === "dark") {
-    updated = htmlString
-      .replace(
-        /svg\s*{[^}]*}/g,
-        '.schematics-svg svg { stroke:#0f0 !important; fill:none !important; }'
-      )
-      .replace(
-        /text\s*{[^}]*}/g,
-        '.schematics-svg text { fill:#0f0 !important; stroke:none !important; }'
-      );
-  }
-
-  setSanitizedHtml(updated);
-}, [theme, htmlString]);
-
-
 
   const zoomIn = () => setZoom((z) => Math.min(z + 0.2, 5));
   const zoomOut = () => setZoom((z) => Math.max(z - 0.2, 0.2));
@@ -42,35 +19,38 @@ useEffect(() => {
   return (
     <div
       className={cn(
-        "relative w-full h-full bg-white dark:bg-black transition-all duration-300",
-        isFullscreen && "fixed inset-0 z-50 p-4 bg-white dark:bg-black"
+        "relative w-full h-full bg-white transition-all duration-300",
+        isFullscreen && "fixed inset-0 z-50 p-4 bg-white"
       )}
     >
       {/* Fullscreen Toggle */}
       <button
-        onClick={() => setIsFullscreen(!isFullscreen)}
-        className="absolute top-3 right-3 z-50 p-2 rounded-full border border-gray-300 bg-white dark:bg-black shadow-lg"
-      >
-        {isFullscreen ? <Minimize2 /> : <Maximize2 />}
-      </button>
+  onClick={() => setIsFullscreen(!isFullscreen)}
+  className="absolute top-3 right-3 z-50 p-2 rounded-full 
+             border border-gray-300 dark:border-gray-700 
+             bg-white dark:bg-gray-800 shadow-lg
+             text-gray-700 dark:text-gray-200"
+>
+  {isFullscreen ? <Minimize2 /> : <Maximize2 />}
+</button>
 
       {/* Zoom Controls */}
       <div className="absolute bottom-5 right-5 z-50 flex flex-col gap-2">
         <button
           onClick={zoomIn}
-          className="p-2 rounded-full bg-white dark:bg-black border shadow"
+          className="p-2 rounded-full bg-white border shadow"
         >
           <Plus />
         </button>
         <button
           onClick={zoomOut}
-          className="p-2 rounded-full bg-white dark:bg-black border shadow"
+          className="p-2 rounded-full bg-white border shadow"
         >
           <Minus />
         </button>
         <button
           onClick={resetZoom}
-          className="p-2 rounded-full bg-white dark:bg-black border shadow"
+          className="p-2 rounded-full bg-white border shadow"
         >
           <RotateCcw />
         </button>
@@ -79,13 +59,12 @@ useEffect(() => {
       {/* SVG Container */}
       <div className="w-full h-full overflow-auto">
         <div
-          className="schematics-svg-wrapper"
           ref={svgWrapperRef}
           style={{
             transform: `scale(${zoom})`,
             transformOrigin: "center top",
           }}
-          dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
+          dangerouslySetInnerHTML={{ __html: htmlString }}
         />
       </div>
     </div>

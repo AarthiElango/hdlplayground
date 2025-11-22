@@ -8,26 +8,31 @@ import { useMainStore } from "@/store/main";
 import { Code, LogIn, LogOut, LucideGithub } from "lucide-react";
 import GithubDialog from "./Github/GithubDialog";
 
+import { useTheme } from "@/providers/ThemeProvider";
+import { Sun, Moon } from "lucide-react";
+
+
 export default function Header() {
   const user = useAuthStore((state) => state.user);
   const { template, project } = useMainStore();
   const { onActionClick } = useActions();
-  const { showGithubDialog, toggleGithubDialog} = useGithubStore();
+  const { showGithubDialog, toggleGithubDialog } = useGithubStore();
+  const { theme, toggleTheme } = useTheme();
 
   const githubAuth = async () => {
-   
+
     const exists = await api.get('github/auth/exists');
-    if(exists.data.success){
+    if (exists.data.success) {
       toggleGithubDialog(true);
       return;
     }
     const response = await api.get(`/github/auth/start`)
     console.log(response.data);
-    if(!response.data.url){
+    if (!response.data.url) {
       return;
     }
 
-   window.open(
+    window.open(
       response.data.url,
       "githubLogin",
       "width=600,height=700"
@@ -44,7 +49,7 @@ export default function Header() {
                 <Code />
               </div>
               <div>
-                <h1 className="text-black">HDL Studio</h1>
+                <h1 className="">HDL Studio</h1>
                 <p className="text-xs text-muted-foreground">
                   Verilog &amp; Hardware Design Platform
                 </p>
@@ -58,7 +63,15 @@ export default function Header() {
             }
 
           </div>
-          <div>
+          <div className="flex justify-start items-center gap-4">
+            <Tooltip title={theme === "light" ? 'dark' : 'light'}>
+              <button 
+                onClick={toggleTheme}
+                className="p-2 cursor-pointer rounded hover:bg-muted transition"
+              >
+                {theme === "light" ? <Moon /> : <Sun />}
+              </button>
+            </Tooltip>
             {user?.username ? (
               <>
                 <Tooltip title="GitHub">
@@ -83,7 +96,7 @@ export default function Header() {
           </div>
         </div>
       </header>
-      { showGithubDialog && <GithubDialog onClose={()=>toggleGithubDialog(false)} />}
+      {showGithubDialog && <GithubDialog onClose={() => toggleGithubDialog(false)} />}
     </>
   );
 }

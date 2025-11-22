@@ -1,0 +1,17 @@
+/* Light mode defaults (unchanged) */
+.schematics-svg-wrapper svg * {
+  stroke: inherit;
+  fill: inherit;
+}
+
+/* Dark Mode Fluorescent Green Override */
+.dark .schematics-svg-wrapper svg * {
+  stroke: #39ff14 !important;   /* Neon green stroke */
+  fill: #39ff14 !important;     /* Neon green fill for shapes */
+  color: #39ff14 !important;    /* Text nodes inside SVG */
+}
+
+/* Some SVG circuits use fill="none" so we explicitly keep it */
+.dark .schematics-svg-wrapper path[fill="none"] {
+  fill: none !important;
+}

@@ -10,7 +10,7 @@ export default function Console() {
   const simulationError = get(result, 'simulation.error.detail', '');
 
   return (
-    <div className="bg-gray-900 text-gray-300 font-mono text-sm p-4 h-full w-full overflow-y-auto whitespace-pre-wrap">
+    <div className="font-mono text-sm p-4 h-full w-full overflow-y-auto whitespace-pre-wrap">
       {simulationError ? (
         <div>
           <div className="flex items-center gap-2 mb-2">
@@ -20,9 +20,9 @@ export default function Console() {
           <div className="text-red-300">{simulationError}</div>
         </div>
       ) : simulationLog ? (
-        <div className="text-gray-300">{simulationLog}</div>
+        <div className="">{simulationLog}</div>
       ) : (
-        <div className="text-gray-500 text-center py-8">No output available</div>
+        <div className="text-center py-8">No output available</div>
       )}
     </div>
   );

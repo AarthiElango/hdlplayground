@@ -1,14 +1,15 @@
 import { useWorkspaceStore } from "@/store/workspace";
 import Editor from "@monaco-editor/react";
 import { isEmpty } from "lodash";
-import  { useRef, useState, useEffect, useImperativeHandle, forwardRef } from "react";
+import { useRef, useState, useEffect, useImperativeHandle, forwardRef } from "react";
+import { useTheme } from "@/providers/ThemeProvider";
 
 interface CodeEditorProps {
   contents: string;
   language: string;
-  src:string;
-  filename:string;
-  refKey:string;
+  src: string;
+  filename: string;
+  refKey: string;
 }
 
 export interface CodeEditorRef {
@@ -22,38 +23,48 @@ const CodeEditor = forwardRef<CodeEditorRef, CodeEditorProps>(({ contents, langu
   const originalValueRef = useRef(contents);
   const [value, setValue] = useState(contents || "");
   const { setFileContents } = useWorkspaceStore();
+  const { theme } = useTheme();
 
-  useEffect(()=>{
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.updateOptions({
+        theme: theme === "dark" ? "vs-dark" : "vs"
+      });
+    }
+  }, [theme]);
+
+  useEffect(() => {
     setFileContents(refKey, filename, value);
-  },[value]);
+  }, [value]);
 
 
-  useEffect(()=>{
-    if(isEmpty(contents) && !isEmpty(src)){
-      async function getContents(){
-            const APP_URL = import.meta.env.VITE_APP_URL;
+  useEffect(() => {
+    if (isEmpty(contents) && !isEmpty(src)) {
+      async function getContents() {
+        const APP_URL = import.meta.env.VITE_APP_URL;
 
-            const res = await fetch(`${APP_URL}/${src}`);
-            if(res.ok){
-              const contents = await res.text();
-              if(contents){
-                setValue(contents);
-              }
-            }
+        const res = await fetch(`${APP_URL}/${src}`);
+        if (res.ok) {
+          const contents = await res.text();
+          if (contents) {
+            setValue(contents);
+          }
+        }
 
       }
       getContents();
     }
-  },[src, contents]);
+  }, [src, contents]);
 
 
 
-  const handleEditorDidMount = (editor: any) => {
+  const handleEditorDidMount = (editor: any, monaco: any) => {
     editorRef.current = editor;
+      monaco.editor.setTheme(theme === "dark" ? "vs-dark" : "vs");
   };
 
   const handleChange = (newValue?: string) => {
-        setFileContents(refKey, filename, newValue??'');
+    setFileContents(refKey, filename, newValue ?? '');
   };
 
   // Expose methods to parent via ref
@@ -75,6 +86,7 @@ const CodeEditor = forwardRef<CodeEditorRef, CodeEditorProps>(({ contents, langu
         value={value}
         onMount={handleEditorDidMount}
         onChange={handleChange}
+        theme={theme === "dark" ? "vs-dark" : "vs"}
         options={{
           minimap: { enabled: false },
           fontSize: 14,

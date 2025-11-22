@@ -143,9 +143,9 @@ export const Tabs = ({ template, refKey }: { template: any, refKey: any }) => {
 
         {/* + BUTTON */}
        <button
-  className="ml-auto p-1 rounded-md bg-primary text-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+  className="ml-auto p-1 rounded-md disabled:cursor-not-allowed"
   onClick={() => setDialogOpen(true)}
-  disabled={true} // or a state like {isDisabled}
+disabled={true}
 >
   <Plus className="w-4 h-4" />
 </button>
